@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+
 import './App.css';
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import InjuryHelp from './screens/InjuryHelp';
@@ -16,6 +16,8 @@ function App() {
         <Routes>
 
           <Route path='/' element={<InjuryHelp/>} />
+
+          
 
         </Routes>
       </BrowserRouter>

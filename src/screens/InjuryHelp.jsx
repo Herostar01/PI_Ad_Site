@@ -1,8 +1,64 @@
 import React from 'react'
+import { useState, useEfect } from 'react'
 import '../App.css'
+import FormContainer from '../components/FormContainer'
 import { Form, Row, Col, Button } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
 
-const InjuryHelp = () => {
+const InjuryHelp = (props) => {
+    const navigate = useNavigate
+
+    const [one, setOne] = useState("");
+    const [two, setTwo] = useState("");
+    const [three, setThree] = useState("");
+    const [four, setFour] = useState("")
+    const [five, setFive] = useState("");
+
+    const [six, setSix] = useState("");
+    const [seven, setSeven] = useState("");
+    const [eight, setEight] = useState("");
+    const [nine, setNine] = useState("");
+    const [ten, setTen] = useState("");
+
+
+    const [errors, setErrors] = useState([]);
+    const [dbErrors, setDBErrors] = useState([]);
+
+    const createProspect = (e) => {
+        e.preventDefault();
+        console.log("Prospect Data Saved")
+
+        const newProspect = {
+            one: one,
+            two,
+            three,
+            four,
+            five,
+            six,
+            seven,
+            eight,
+            nine,
+            ten
+        }
+
+        axios.post("http://localhost:8000/api/prospects", newProspect)
+            .then(res => {
+                console.log(res.data);
+                console.log("success adding a Prospect!!");
+                navigate("/next")
+            })
+            .catch(err => {
+                console.log("ERROR ❌ Couldn't Ad Pet!");
+                console.log("?????", err.response.data.error.errors);
+
+                // handle Errors - another way
+                const {errors} = err.response.data.error;
+                const messages = Object.keys(errors).map( error => errors[error].message )
+                console.log(messages);
+                setDBErrors(messages);
+
+            })
+    }
 
     
     
@@ -32,63 +88,51 @@ const InjuryHelp = () => {
             You May be Entitled to Maximum Compensation. Take this 60 second qualification and find out:
         </h1>
 
-        <FormContainer>
-        <h1> Sign Up </h1>
-        
+        <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", padding: "15px"}}>  
+            <h1> Pet Shelter </h1>
+            <Link to={'/'}> Return Home </Link>
+            </div>
 
-        <Form onSubmit={submitHandler}>
-            <Form.Group controlId='name'>
-                <Form.Label> Name  </Form.Label>
-                <Form.Control 
-                    type='name' 
-                    placeholder='Enter Name'
-                    value={name}
-                    onChange= {(e) => setName(e.target.value)}></Form.Control>
-            </Form.Group>
+            
 
-            <Form.Group controlId='email'>
-                <Form.Label>Email Address</Form.Label>
-                <Form.Control
-                type='email'
-                placeholder='Enter email'
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                >
-                </Form.Control> 
-            </Form.Group>
+            {/* {
+                errors.map((err, index) => <p key={index} style={{color: "red"}}>{err}</p>)
+            } */}
+            {
+                dbErrors.map((err, index) => <p key={index} style={{color: "red"}}>{err}</p>)
+            }
 
-            <Form.Group controlId='password'>
-                <Form.Label> Password  </Form.Label>
-                <Form.Control 
-                    type='password' 
-                    placeholder='Enter password'
-                    value={password}
-                    onChange= {(e) => setPassword(e.target.value)}></Form.Control>
-            </Form.Group>
+            <form onSubmit={createPet}>
+                <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", padding: "15px" , border: "2px solid black" }} >
 
-            <Form.Group controlId='confirmPassword'>
-                <Form.Label> Confirm Password  </Form.Label>
-                <Form.Control 
-                    type='password' 
-                    placeholder='Confirm Password'
-                    value={confirmPassword}
-                    onChange= {(e) => setConfirmPassword(e.target.value)}></Form.Control>
-            </Form.Group>
+                <div style={{  alignItems: "center" }}>
+                Pet Name:
+                <input type="text" onChange={(e) => setName(e.target.value)} value={name} /><br />
+                Pet Type:
+                <input type="text" onChange={(e) => setType(e.target.value)} value={type} /><br />
+                Pet Description:
+                <input type="text" onChange={(e) => setDescription(e.target.value)} value={description} /><br />
+                <br />
 
-            <Button type='submit' variant='primary' className='m-3'>
-                Register
-            </Button>
+                <button style={{backgroundColor: "blue", color: "white" }} >Add Pet</button>
 
-        </Form>
+                </div>
 
-        <Row className='py-3' >
-            <Col>
-                Have an Account? 
+                <div> <div>Skills (optional):</div>
+                Skill 1:
+                <input type="text" onChange={(e) => setSkillOne(e.target.value)} value={skillOne} /><br />
+                Skill 2:
+                <input type="text" onChange={(e) => setSkillTwo(e.target.value)} value={skillTwo} /><br />
+                Skill 3:
+                <input type="text" onChange={(e) => setSkillThree(e.target.value)} value={skillThree} /><br />
+                <br />
+                </div>
+
+
+
+                </div>
                 
-            </Col>
-
-        </Row>
-    </FormContainer> 
+            </form>
         
     </div>
 
